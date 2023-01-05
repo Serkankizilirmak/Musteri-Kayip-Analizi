@@ -5,9 +5,6 @@ import random
 import pprint
 import numpy as np  # For linear algebra
 import pandas as pd  # For data manipulation
-import matplotlib.pyplot as plt  # For 2D visualization
-import seaborn as sns
-import pandas as pd
 
 import warnings
 
@@ -17,12 +14,7 @@ from collections import Counter
 from scipy import stats  # For statistics
 from scipy.stats.contingency import association  # upgrade scipy to use this to calculate Cramer's V
 
-"""Plotly visualization"""
-import plotly.graph_objs as go
-import plotly.express as px
-import plotly.io as pio
-from plotly.subplots import make_subplots
-from plotly.offline import init_notebook_mode, iplot
+
 
 """scikit-learn modules"""
 from sklearn.preprocessing import OrdinalEncoder, LabelEncoder
@@ -35,34 +27,12 @@ import pickle, joblib
 
 from IPython.display import Markdown, display
 
-def printmd(string):
-    display(Markdown(string))
-
-sns.set_style('whitegrid')
-
-init_notebook_mode(connected=True)  # to display plotly graph offline
-
 
 def print_unique_values(dataframe):
     for i in dataframe.columns:
         print(i)
         print(dataframe[i].unique())
 
-
-plt_params = {
-    # 'figure.facecolor': 'white',
-    'axes.facecolor' : 'white',
-
-    ## to set size
-    # 'legend.fontsize': 'x-large',
-    # 'figure.figsize': (15, 10),
-    # 'axes.labelsize': 'x-large',
-    # 'axes.titlesize': 'x-large',
-    # 'xtick.labelsize': 'x-large',
-    # 'ytick.labelsize': 'x-large'
-}
-
-plt.rcParams.update(plt_params)
 
 
 left_padding = 21

@@ -119,7 +119,6 @@ def barplot(var_select, x_no_numeric) :
     fig = go.Figure(data=[trace1, trace2, trace3], layout=layout)
     pio.write_html(fig, file='D:\SERKAN KIZILIRMAK\Python\AllProjects\Müşteri Kayıp Analizi (TelcoCustomer)\Data\Çıktılar\Dağılım3\{}.html'.format(var_select + "(Dağılımı3)"))
     iplot(fig)
-    iplot(fig)
 
 ### plot_distribution_cat ### ---4---
 def plot_distribution_cat(feature1,feature2, df):

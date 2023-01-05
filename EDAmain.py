@@ -8,6 +8,7 @@ from plotly.offline import iplot
 import matplotlib.pyplot as plt  # For 2D visualization
 
 """Plotly visualization"""
+import plotly
 import plotly.graph_objs as go
 import plotly.express as px
 import plotly.io as pio
@@ -67,6 +68,7 @@ def plot_distribution_num(data_select) :
     plt.show()
 ### barplot ### ---3---
 def barplot(var_select, x_no_numeric) :
+    df["Kayıp Durumu"].replace(to_replace = dict(Var = 1, Yok = 0), inplace = True)
     tmp1 = df[(df['Kayıp Durumu'] != 0)]
     tmp2 = df[(df['Kayıp Durumu'] == 0)]
     tmp3 = pd.DataFrame(pd.crosstab(df[var_select],df['Kayıp Durumu']), )

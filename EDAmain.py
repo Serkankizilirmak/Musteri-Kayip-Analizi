@@ -6,6 +6,8 @@ import plotly.offline as pyoff
 import plotly.graph_objs as go
 from plotly.offline import iplot
 import matplotlib.pyplot as plt  # For 2D visualization
+import numpy as np
+from IPython.display import Markdown, display
 
 """Plotly visualization"""
 import plotly
@@ -33,7 +35,10 @@ plt_params = {
 }
 
 plt.rcParams.update(plt_params)
-
+####
+def printmd(string):
+    display(Markdown(string))
+####
 ### plot_distribution ### ---1---
 df = pd.read_csv("D:\SERKAN KIZILIRMAK\Python\AllProjects\Müşteri Kayıp Analizi (TelcoCustomer)\Data\TelcoCustomer(TR).csv")
 df["Kayıp Durumu"].replace(to_replace = dict(Var = 1, Yok = 0), inplace = True)
@@ -139,4 +144,43 @@ def plot_distribution_cat(feature1,feature2, df):
     for p in s.patches:
         s.annotate('{:.0f}'.format(p.get_height()), (p.get_x()+0.15, p.get_height()+30))
     plt.savefig("D:\SERKAN KIZILIRMAK\Python\AllProjects\Müşteri Kayıp Analizi (TelcoCustomer)\Data\Çıktılar\Dağılım4\{} ve {} (Dağılımı4).png".format(feature1, feature2))
+    plt.show()
+### binning_feature###
+
+def binning_feature(feature):
+    plt.hist(df[feature])
+
+    # set x/y labels and plot title
+    plt.xlabel(f"{feature.title()}")
+    plt.ylabel("Count")
+    plt.title(f"{feature.title()} Bins")
+    plt.show()
+
+    bins = np.linspace(min(df[feature]), max(df[feature]), 4)
+
+    printmd("**Value Range**")
+
+    printmd(f"Low ({bins[0] : .2f} - {bins[1]: .2f})")
+    printmd(f"Medium ({bins[1]: .2f} - {bins[2]: .2f})")
+    printmd(f"High ({bins[2]: .2f} - {bins[3]: .2f})")
+
+    group_names = ['Low', 'Medium', 'High']
+
+    df.insert(df.shape[1]-1,f'{feature}-binned', pd.cut(df[feature], bins, labels=group_names, include_lowest=True))
+    display(df[[feature, f'{feature}-binned']].head(10))
+
+
+    # count values
+    printmd("<br>**Binning Distribution**<br>")
+    display(df[f'{feature}-binned'].value_counts())
+
+
+    # plot the distribution of each bin
+    plt.bar(group_names, df[f'{feature}-binned'].value_counts())
+    # px.bar(data_canada, x='year', y='pop')
+
+    # set x/y labels and plot title
+    plt.xlabel(f"{feature.title()}")
+    plt.ylabel("Count")
+    plt.title(f"{feature.title()} Bins")
     plt.show()

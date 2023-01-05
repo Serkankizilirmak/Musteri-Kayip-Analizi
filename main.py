@@ -25,7 +25,7 @@ from sklearn.metrics import matthews_corrcoef
 import multiprocessing
 import pickle, joblib
 
-from IPython.display import Markdown, display
+
 
 
 def print_unique_values(dataframe):
@@ -34,7 +34,7 @@ def print_unique_values(dataframe):
         print(dataframe[i].unique())
 
 
-
+################
 left_padding = 21
 
 SEED = 42
@@ -46,8 +46,7 @@ def seed_everything(seed=42):
 
 seed_everything(SEED)
 
-def printmd(string):
-    display(Markdown(string))
+##################
 
 df = pd.read_csv("D:\SERKAN KIZILIRMAK\Python\AllProjects\Müşteri Kayıp Analizi (TelcoCustomer)\Data\TelcoCustomer(TR).csv")
 

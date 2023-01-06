@@ -184,3 +184,101 @@ def binning_feature(feature):
     plt.ylabel("Count")
     plt.title(f"{feature.title()} Bins")
     plt.show()
+
+#### make_subplots2 ####
+def make_subplots2(feature1,feature2,feature3,feature4):
+    fig = make_subplots(rows=2, cols=2,
+                        specs=[[{'type': 'domain'}, {'type': 'domain'}], [{'type': 'domain'}, {'type': 'domain'}]])
+
+    fig.add_trace(go.Pie(labels=df[feature1].value_counts().index,
+                         values=df[feature1].value_counts().values, name=feature1),
+                  1, 1)
+    fig.add_trace(go.Pie(labels=df[feature2].value_counts().index,
+                         values=df[feature2].value_counts().values, name=feature2),
+                  1, 2)
+    fig.add_trace(go.Pie(labels=df[feature3].value_counts().index,
+                         values=df[feature3].value_counts().values, name=feature3),
+                  2, 1)
+    fig.add_trace(go.Pie(labels=df[feature4].value_counts().index,
+                         values=df[feature4].value_counts().values, name=feature4),
+                  2, 2)
+
+    # donut-like pie chart
+    fig.update_traces(hole=.5, hoverinfo="label+percent")
+
+    fig.update_layout(
+
+        # Add annotations in the center of the donut pies.
+        annotations=[dict(text=feature1, x=0.195, y=0.85, font_size=20, showarrow=False),
+                     dict(text=feature2, x=0.804, y=0.86, font_size=20, showarrow=False),
+                     dict(text=feature3, x=0.192, y=0.18, font_size=20, showarrow=False),
+                     dict(text=feature4, x=0.805, y=0.18, font_size=20, showarrow=False)])
+    fig.update_layout(margin=dict(t=0, b=0, l=0, r=0))
+    fig.show()
+
+## pie_churn ####
+
+def pie_churn(feature):
+    trace = go.Pie(labels = ['Kayıp Durumu : Hayır', 'Kayıp Durumu : Evet'], values = df[feature].value_counts(),
+                   textfont=dict(size=15), opacity = 0.8,
+                   marker=dict(colors=['lightblue','gold'],
+                               line=dict(color='#000000', width=1.5)))
+
+
+    layout = dict(title =  'Kayıp Durumu Değişkeninin Dağılımı',
+                            autosize = False,
+                            height  = 500,
+                            width   = 800)
+
+    fig = dict(data = [trace], layout=layout)
+    iplot(fig)
+## pie ##
+def pie(feature):
+    display(px.pie(df[feature].value_counts().reset_index().rename(columns={'index':'Type'}), values=feature, names='Type', title=feature + "Distribution" ))
+
+## box_plot ##
+def box_plot(feature):
+    sns.boxplot(x=df[feature])
+    plt.show()
+
+### density ###
+def density(feature):
+    """Plots histogram and density plot of a variable."""
+
+    # Create subplot object
+    fig = make_subplots(
+        rows=2,
+        cols=1,
+        print_grid=False,
+        subplot_titles=(
+        f"Distribution of {feature.name} with Histogram", f"Distribution of {feature.name} with Density Plot"))
+
+    # This is a count histogram
+    fig.add_trace(
+        go.Histogram(
+            x=feature,
+            hoverinfo="x+y"
+        ),
+        row=1, col=1)
+
+    # This is a density histogram
+    fig.add_trace(
+        go.Histogram(
+            x=feature,
+            hoverinfo="x+y",
+            histnorm="density"
+        ),
+        row=2, col=1)
+
+    # Update layout
+    fig.layout.update(
+        height=800,
+        width=870,
+        hovermode="closest"
+    )
+
+    # Update axes
+    fig.layout.yaxis1.update(title="<b>Abs Frequency</b>")
+    fig.layout.yaxis2.update(title="<b>Density(%)</b>")
+    fig.layout.xaxis2.update(title=f"<b>{feature.name}</b>")
+    return fig.show()

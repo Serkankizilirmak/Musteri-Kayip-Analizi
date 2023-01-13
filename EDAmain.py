@@ -8,7 +8,7 @@ from plotly.offline import iplot
 import matplotlib.pyplot as plt  # For 2D visualization
 import numpy as np
 from IPython.display import Markdown, display
-
+from sklearn.preprocessing import OrdinalEncoder, LabelEncoder
 """Plotly visualization"""
 import plotly
 import plotly.graph_objs as go
@@ -20,6 +20,9 @@ from plotly.offline import init_notebook_mode, iplot
 sns.set_style('whitegrid')
 
 init_notebook_mode(connected=True)  # to display plotly graph offline
+
+
+###
 
 plt_params = {
     # 'figure.facecolor': 'white',
@@ -282,3 +285,96 @@ def density(feature):
     fig.layout.yaxis2.update(title="<b>Density(%)</b>")
     fig.layout.xaxis2.update(title=f"<b>{feature.name}</b>")
     return fig.show()
+
+
+### plot_counting_distribution ###
+
+### Data Sets ####
+df = pd.read_csv("D:\SERKAN KIZILIRMAK\Python\AllProjects\Müşteri Kayıp Analizi (TelcoCustomer)\Data\TelcoCustomer(TR)_binned.csv")
+
+
+def plot_counting_distribution(cardinality_value):
+    # label encoding binary columns
+    le = LabelEncoder()
+
+    tmp_churn = df[df['Kayıp Durumu'] == 'Var']
+    tmp_no_churn = df[df['Kayıp Durumu'] == 'Yok']
+
+    selected_columns = df.nunique()[df.nunique() == cardinality_value].keys()
+
+    for col in selected_columns:
+        tmp_churn[col] = le.fit_transform(tmp_churn[col])
+
+    data_frame_x = tmp_churn[selected_columns].sum().reset_index()
+    data_frame_x.columns = ["feature", "Var"]
+    data_frame_x["Yok"] = tmp_churn.shape[0] - data_frame_x["Var"]
+    data_frame_x = data_frame_x[data_frame_x["feature"] != "Kayıp Durumu"]
+
+    # count of 1's(yes)
+    trace1 = go.Scatterpolar(r=data_frame_x["Var"].values.tolist(),
+                             theta=data_frame_x["feature"].tolist(),
+                             fill="toself", name="Churn 1's",
+                             mode="markers+lines", visible=True,
+                             marker=dict(size=5)
+                             )
+
+    # count of 0's(No)
+    trace2 = go.Scatterpolar(r=data_frame_x["Yok"].values.tolist(),
+                             theta=data_frame_x["feature"].tolist(),
+                             fill="toself", name="Churn 0's",
+                             mode="markers+lines", visible=True,
+                             marker=dict(size=5)
+                             )
+    for col in selected_columns:
+        tmp_no_churn[col] = le.fit_transform(tmp_no_churn[col])
+
+    data_frame_x = tmp_no_churn[selected_columns].sum().reset_index()
+    data_frame_x.columns = ["feature", "Var"]
+    data_frame_x["Yok"] = tmp_no_churn.shape[0] - data_frame_x["Var"]
+    data_frame_x = data_frame_x[data_frame_x["feature"] != "Kayıp Durumu"]
+
+    # count of 1's(yes)
+    trace3 = go.Scatterpolar(r=data_frame_x["Var"].values.tolist(),
+                             theta=data_frame_x["feature"].tolist(),
+                             fill="toself", name="NoChurn 1's",
+                             mode="markers+lines", visible=False,
+                             marker=dict(size=5)
+                             )
+
+    # count of 0's(No)
+    trace4 = go.Scatterpolar(r=data_frame_x["Yok"].values.tolist(),
+                             theta=data_frame_x["feature"].tolist(),
+                             fill="toself", name="NoChurn 0's",
+                             mode="markers+lines", visible=False,
+                             marker=dict(size=5)
+                             )
+
+    data = [trace1, trace2, trace3, trace4]
+
+    updatemenus = list([
+        dict(active=0,
+             x=-0.15,
+             buttons=list([
+                 dict(
+                     label='Churn Dist',
+                     method='update',
+                     args=[{'visible': [True, True, False, False]},
+                           {'title': f'Customer Churn Binary Counting Distribution'}]),
+
+                 dict(
+                     label='No-Churn Dist',
+                     method='update',
+                     args=[{'visible': [False, False, True, True]},
+                           {'title': f'No Customer Churn Binary Counting Distribution'}]),
+
+             ]),
+             )
+    ])
+
+    layout = dict(title='ScatterPolar Distribution of Churn and Non-Churn Customers (Select from Dropdown)',
+                  showlegend=False,
+                  updatemenus=updatemenus)
+
+    fig = dict(data=data, layout=layout)
+
+    pio.show(fig)

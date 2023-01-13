@@ -10,11 +10,6 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-from collections import Counter
-from scipy import stats  # For statistics
-from scipy.stats.contingency import association  # upgrade scipy to use this to calculate Cramer's V
-
-
 
 """scikit-learn modules"""
 from sklearn.preprocessing import OrdinalEncoder, LabelEncoder

@@ -64,9 +64,9 @@ def plot_distribution(var_select, bin_size):
     plt.show()
 
 ### plot_distribution_num ### ---2---
-def plot_distribution_num(data_select) :
+def plot_distribution_num(data_select):
     sns.set_style("ticks")
-    s = sns.FacetGrid(df, hue = 'Kayıp Durumu',aspect = 2.5, palette ={0 : 'lightblue', 1 : 'gold'})
+    s = sns.FacetGrid(df, hue = 'Kayıp Durumu',aspect = 2.5, palette ={"Yok" : 'lightblue', "Var" : 'gold'})
     s.map(sns.kdeplot, data_select, shade = True, alpha = 0.8)
     s.set(xlim=(0, df[data_select].max()))
     s.add_legend()

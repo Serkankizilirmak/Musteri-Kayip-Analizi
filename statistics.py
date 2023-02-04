@@ -6,6 +6,7 @@ import numpy as np
 from IPython.display import Markdown, display
 import math
 import matplotlib.pyplot as plt
+import pingouin as pg
 
 import plotly.graph_objs as go
 import plotly.io as pio
@@ -28,9 +29,9 @@ def cal_spearmanr(c1, c2):
     print(f'{c1}, {c2} correlation : {correlation}, p : {p_value}')
 
     if p_value > alpha:
-        print('Probably do not have monotonic relationship (fail to reject H0)')
+        print('Muhtemelen monoton bir ilişki yok (fail to reject H0)')
     else:
-        print('Probably have monotonic relationship (reject H0)')
+        print('Muhtemelen monoton bir ilişki Var (reject H0)')
 
 
 #### Kendall Rank ####

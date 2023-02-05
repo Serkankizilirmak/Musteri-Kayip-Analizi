@@ -21,8 +21,6 @@ import multiprocessing
 import pickle, joblib
 
 
-
-
 def print_unique_values(dataframe):
     for i in dataframe.columns:
         print(i)
@@ -41,5 +39,30 @@ def seed_everything(seed=42):
 
 seed_everything(SEED)
 
-##################
+
+# Classic Algorithms
+from sklearn.ensemble import StackingClassifier, RandomForestClassifier, ExtraTreesClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+
+# Boosting Algorithms
+import lightgbm as lgb
+# from lightgbm                         import LGBMClassifier
+from xgboost                          import XGBClassifier
+from catboost                         import CatBoostClassifier
+
+
+# optuna
+import optuna
+from optuna.visualization import plot_optimization_history, plot_param_importances
+
+import multiprocessing
+import pickle, joblib
+
+from IPython.display import Markdown, display
+
+# utility function to print markdown string
+def printmd(string):
+    display(Markdown(string))
 

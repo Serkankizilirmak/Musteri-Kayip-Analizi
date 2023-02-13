@@ -7,6 +7,7 @@ from IPython.display import Markdown, display
 import math
 import matplotlib.pyplot as plt
 import pingouin as pg
+from pandas_profiling import ProfileReport
 
 import plotly.graph_objs as go
 import plotly.io as pio
